@@ -18,9 +18,22 @@ def test_internal_api_valid_response(mocked_response):
     assert res[0] == res[1] == res[2] == valid_response
 
 
-def test_internal_api_valid_response(mocked_response):
+def test_internal_api_invalid_response(mocked_response):
+    start_loop()
+    valid_response = {'wrong_param': -1}
+    for api_url in API_URLS:
+        mocked_response.get(f"{api_url}?member_id=1", status=200, payload=valid_response)
+    with pytest.raises(DeductibleApiError) as err:
+        res = deducible_api_caller(1)
+
+
+def test_internal_api_internal_error(mocked_response):
     start_loop()
     for api_url in API_URLS:
         mocked_response.get(f"{api_url}?member_id=1", status=500)
     with pytest.raises(DeductibleApiError) as err:
         res = deducible_api_caller(1)
+
+
+
+
