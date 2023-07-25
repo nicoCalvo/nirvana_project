@@ -42,12 +42,10 @@ def calculate_average(responses):
     avg_api_responses = {'deductible': 0, 'stop_loss': 0, 'oop_max': 0}
     for resp in responses:
         avg_api_responses = {
-            key: resp[key] + avg_api_responses[key]  for key in resp
+            key: resp[key] + avg_api_responses[key] for key in resp
         }
-    avg_api_responses ={
+    avg_api_responses = {
         key: int(avg_api_responses[key] / len(responses))
         for key in avg_api_responses
     }
     return avg_api_responses
-
-

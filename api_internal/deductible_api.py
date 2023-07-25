@@ -32,17 +32,19 @@ TIMEOUT = 10
 
 validator = Validator(SCHEMA)
 
+
 async def call_api(url):
-     logger.info(f"Calling {url}")
-     async with aiohttp.ClientSession() as session:
+    logger.info(f"Calling {url}")
+    async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
             json_response = await response.json()
-        return json_response
+    return json_response
+
 
 async def api_call(urls):
     """
     This method will execute all api calls concurrently and wait for all of them to finish.
-    In case of exceptions, they will be returned as part of the results in the list and the 
+    In case of exceptions, they will be returned as part of the results in the list and the
     remaining executions won't be halted
 
     Return: list of json with response
@@ -60,7 +62,7 @@ def event_loop(loop):
 
 def start_loop():
     """
-    Send the asyncio loop to a thread in the background 
+    Send the asyncio loop to a thread in the background
     and communicate to it through run_coroutine_threadsafe
     """
     t = Thread(target=event_loop, args=(loop,))
@@ -68,8 +70,9 @@ def start_loop():
     t.start()
 
 
-class DeductibleApiError(Exception): pass
-    
+class DeductibleApiError(Exception):
+    pass
+
 
 def deducible_api_caller(member_id):
     """
@@ -88,7 +91,7 @@ def deducible_api_caller(member_id):
         raise DeductibleApiError() from e
     try:
         assert all(validator.validate(response, SCHEMA)for response in responses)
-    except:
+    except Exception:
         logger.exception(f"Invalid responses - schema unmatch: {responses}")
         raise DeductibleApiError("Invalid Response")
     return responses
