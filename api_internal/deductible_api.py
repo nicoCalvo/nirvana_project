@@ -1,4 +1,9 @@
 
+# disclaimer: This could've been much easier if instead of implemnenting an asyncio loop in a thread,
+# import the lib grequests: https://github.com/spyoungtech/grequests
+# However it seemed much funnier to play with asyncio and hide the implementation details
+
+
 from concurrent.futures._base import TimeoutError
 import logging
 from threading import Thread
@@ -35,6 +40,14 @@ async def call_api(url):
         return json_response
 
 async def api_call(urls):
+    """
+    This method will execute all api calls concurrently and wait for all of them to finish.
+    In case of exceptions, they will be returned as part of the results in the list and the 
+    remaining executions won't be halted
+
+    Return: list of json with response
+
+    """
     coros = [call_api(url) for url in urls]
     res = await asyncio.gather(*coros, return_exceptions=True)
     return res
@@ -46,6 +59,10 @@ def event_loop(loop):
 
 
 def start_loop():
+    """
+    Send the asyncio loop to a thread in the background 
+    and communicate to it through run_coroutine_threadsafe
+    """
     t = Thread(target=event_loop, args=(loop,))
     t.daemon = True
     t.start()
@@ -55,6 +72,13 @@ class DeductibleApiError(Exception): pass
     
 
 def deducible_api_caller(member_id):
+    """
+    Call apis and apply validation schema
+
+    Return: List of Json
+
+    Raises: DeductibleApiError In case of any error faced during fetch or schema validation
+    """
     urls = [f"{api_url}?member_id={member_id}" for api_url in API_URLS]
     try:
         call = asyncio.run_coroutine_threadsafe(api_call(urls), loop)
