@@ -8,10 +8,12 @@ make as many calls as desired at the same time without coupling the logic with t
 from .deductible_api import (
     API_URLS,
     deducible_api_caller,
+    DeductibleApiError,
     start_loop
 )
 __all__ = [
     'API_URLS',
     'deducible_api_caller',
+    'DeductibleApiError'
     'start_loop',
 ]
