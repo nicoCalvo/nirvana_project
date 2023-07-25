@@ -65,6 +65,6 @@ def deducible_api_caller(member_id):
     try:
         assert all(validator.validate(response, SCHEMA)for response in responses)
     except:
-        logger.exception("Invalid responses - schema unmatch: {responses}")
+        logger.exception(f"Invalid responses - schema unmatch: {responses}")
         raise DeductibleApiError("Invalid Response")
     return responses
