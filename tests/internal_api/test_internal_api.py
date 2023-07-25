@@ -1,5 +1,3 @@
-import unittest
-import pytest
 
 from api_internal import (
     API_URLS,
@@ -7,9 +5,6 @@ from api_internal import (
     start_loop
 )
 
-
-#  {deductible: 1000, stop_loss: 10000, oop_max: 5000}
-# https://api1.com?member_id=1
 
 def test_internal_api_valid_response(mocked_response):
     start_loop()
