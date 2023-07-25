@@ -74,5 +74,15 @@ Upload your completed project to your GitHub, and then paste a link to the repos
 Using Python 3.7 proceed to install requirements in /requirements
 
 ```
-pip install -r requirements
+pip install -r requirements/prod.txt
+```
+
+## Testing
+
+```
+pip install -r requirements/test.txt
+```
+
+```
+ pytest --cov=api --cov=api_internal tests/
 ```
