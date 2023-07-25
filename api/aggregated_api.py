@@ -1,5 +1,6 @@
 
 import logging
+import os
 
 from flask import request
 from flask_restful import (
@@ -22,7 +23,14 @@ class AggregatedApi(Resource):
 
     def __init__(self, *args, **kwargs):
         super(AggregatedApi, self).__init__(*args, **kwargs)
+        self.strategy = self._set_strategy()
         start_loop()
+
+    @classmethod
+    def _set_strategy(cls):
+        strategy = os.environ.get('STRATEGY', 'AVG')
+        if strategy == 'AVG':
+            return calculate_average
 
     def get(self):
         member_ids = request.args.getlist(self.MEMBER_ID)
@@ -34,7 +42,7 @@ class AggregatedApi(Resource):
             logger.exception("Invalid response from internal APIs")
             abort(500, message="Cannot process the request")
 
-        avg_responses = calculate_average(responses)
+        avg_responses = self.strategy(responses)
         return avg_responses
 
 
