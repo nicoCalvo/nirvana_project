@@ -1,9 +1,8 @@
 from unittest import mock
-from mock import patch
 import api
 
 
-@patch('api.aggregated_api.deducible_api_caller',
+@mock.patch('api.aggregated_api.deducible_api_caller',
        return_value=[
         {'deductible': 1000, 'stop_loss': 10000, 'oop_max': 5000},
         {'deductible': 1200, 'stop_loss': 13000, 'oop_max': 6000},

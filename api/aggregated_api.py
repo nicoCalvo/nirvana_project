@@ -28,7 +28,6 @@ class AggregatedApi(Resource):
         member_ids = request.args.getlist(self.MEMBER_ID)
         if len(member_ids) == 0 or len(member_ids) > 1:
             abort(409, message="invalid member_id - only 1 allowed")
-
         try:
             responses = deducible_api_caller(member_ids[0])
         except DeductibleApiError:
